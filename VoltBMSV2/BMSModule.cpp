@@ -47,81 +47,97 @@ void BMSModule::clearmodule()
 
 void BMSModule::decodecan(int Id, CAN_message_t &msg)
 {
-  switch (Id)
+  if (moduleAddress < 0xC)
   {
-    case 1:
-      cellVolt[1] = float(((msg.buf[0]  << 8)   + msg.buf[1]) * 0.00125);
-      cellVolt[2] = float(((msg.buf[2]  << 8)   + msg.buf[3]) * 0.00125);
-      cellVolt[3] = float(((msg.buf[4]  << 8)   + msg.buf[5]) * 0.00125);
-      cellVolt[4] = float(((msg.buf[6]  << 8)   + msg.buf[7]) * 0.00125);
-      break;
+    switch (Id)
+    {
+      case 0x60:
+        if ((((msg.buf[0] & 0x7F)  << 8)   + msg.buf[1]) > 0)
+        {
+          cellVolt[1] = float((((msg.buf[0] & 0x7F)  << 8)   + msg.buf[1]) * 0.00125);
+        }
+        if (((msg.buf[2]  << 8)   + msg.buf[3]) > 0)
+        {
+          cellVolt[2] = float(((msg.buf[2]  << 8)   + msg.buf[3]) * 0.00125);
+        }
+        if (((msg.buf[4]  << 8)   + msg.buf[5]) > 0)
+        {
+          cellVolt[3] = float(((msg.buf[4]  << 8)   + msg.buf[5]) * 0.00125);
+        }
+        if (((msg.buf[6]  << 8)   + msg.buf[7]) > 0)
+        {
+          cellVolt[4] = float(((msg.buf[6]  << 8)   + msg.buf[7]) * 0.00125);
+        }
+        break;
 
-    case 2:
-      cellVolt[5] = float(((msg.buf[0] << 8)  + msg.buf[1]) * 0.00125);
-      cellVolt[6] = float(((msg.buf[2] << 8)  + msg.buf[3]) * 0.00125);
-      cellVolt[7] = float(((msg.buf[4] << 8)  + msg.buf[5]) * 0.00125);
-      cellVolt[8] = float(((msg.buf[6] << 8) + msg.buf[7]) * 0.00125);
-      break;
+      case 0x70:
+        if ((((msg.buf[0] & 0x7F)  << 8)   + msg.buf[1]) > 0)
+        {
+          cellVolt[5] = float((((msg.buf[0] & 0x7F) << 8)  + msg.buf[1]) * 0.00125);
+        }
+        if (((msg.buf[2]  << 8)   + msg.buf[3]) > 0)
+        {
+          cellVolt[6] = float(((msg.buf[2] << 8)  + msg.buf[3]) * 0.00125);
+        }
+        if (((msg.buf[4]  << 8)   + msg.buf[5]) > 0)
+        {
+          cellVolt[7] = float(((msg.buf[4] << 8)  + msg.buf[5]) * 0.00125);
+        }
+        if (((msg.buf[6]  << 8)   + msg.buf[7]) > 0)
+        {
+          cellVolt[8] = float(((msg.buf[6] << 8) + msg.buf[7]) * 0.00125);
+        }
+        break;
 
-    case 3:
-      cellVolt[9] = float(((msg.buf[0]  << 8)  + msg.buf[1]) * 0.00125);
-      cellVolt[10] = float(((msg.buf[2] << 8)   + msg.buf[3]) * 0.00125);
-      cellVolt[11] = float(((msg.buf[4] << 8)   + msg.buf[5]) * 0.00125);
-      cellVolt[12] = float(((msg.buf[6]  << 8)  + msg.buf[7]) * 0.00125);
-      break;
+      case 0xE0:
+        temperatures[0] = float(((msg.buf[6] << 8) + msg.buf[7]) * -0.0324 + 150);
+        break;
 
-    case 4:
-      cellVolt[13] = float(((msg.buf[0]  << 8)   + msg.buf[1]) * 0.00125);
-      cellVolt[14] = float(((msg.buf[2]  << 8)   + msg.buf[3]) * 0.00125);
-      cellVolt[15] = float(((msg.buf[4]  << 8)   + msg.buf[5]) * 0.00125);
-      cellVolt[16] = float(((msg.buf[6]  << 8)   + msg.buf[7]) * 0.00125);
-      break;
+      default:
+        break;
+    }
+  }
+  else
+  {
+    switch (Id)
+    {
+      case 0x60:
+        if ((((msg.buf[0] & 0x7F)  << 8)   + msg.buf[1]) > 0)
+        {
+          cellVolt[1] = float((((msg.buf[0] & 0x7F)  << 8)   + msg.buf[1]) * 0.00125);
+        }
+        if (((msg.buf[2]  << 8)   + msg.buf[3]) > 0)
+        {
+          cellVolt[2] = float(((msg.buf[2]  << 8)   + msg.buf[3]) * 0.00125);
+        }
+        if (((msg.buf[4]  << 8)   + msg.buf[5]) > 0)
+        {
+          cellVolt[3] = float(((msg.buf[4]  << 8)   + msg.buf[5]) * 0.00125);
+        }
+        break;
 
-    case 5:
-      cellVolt[17] = float(((msg.buf[0]  << 8)  + msg.buf[1]) * 0.00125);
-      cellVolt[18] = float(((msg.buf[2]  << 8)   + msg.buf[3]) * 0.00125);
-      cellVolt[19] = float(((msg.buf[4]  << 8)  + msg.buf[5]) * 0.00125);
-      cellVolt[20] = float(((msg.buf[6]  << 8)   + msg.buf[7]) * 0.00125);
-      break;
+      case 0x70:
+        if ((((msg.buf[0] & 0x7F)  << 8)   + msg.buf[1]) > 0)
+        {
+          cellVolt[5] = float((((msg.buf[0] & 0x7F) << 8)  + msg.buf[1]) * 0.00125);
+        }
+        if (((msg.buf[2]  << 8)   + msg.buf[3]) > 0)
+        {
+          cellVolt[6] = float(((msg.buf[2] << 8)  + msg.buf[3]) * 0.00125);
+        }
+        if (((msg.buf[4]  << 8)   + msg.buf[5]) > 0)
+        {
+          cellVolt[7] = float(((msg.buf[4] << 8)  + msg.buf[5]) * 0.00125);
+        }
+        break;
 
-    case 6:
-      cellVolt[21] = float(((msg.buf[0]  << 8)   + msg.buf[1]) * 0.00125);
-      cellVolt[22] = float(((msg.buf[2]  << 8)  + msg.buf[3]) * 0.00125);
-      cellVolt[23] = float(((msg.buf[4]  << 8)   + msg.buf[5]) * 0.00125);
-      cellVolt[24] = float(((msg.buf[6]  << 8)  + msg.buf[7]) * 0.00125);
-      break;
+      case 0xE0:
+        temperatures[0] = float(((msg.buf[6] << 8) + msg.buf[7]) * -0.0324 + 150);
+        break;
 
-    case 7:
-      cellVolt[25] = float(((msg.buf[0]  << 8)   + msg.buf[1]) * 0.00125);
-      cellVolt[26] = float(((msg.buf[2]  << 8)  + msg.buf[3]) * 0.00125);
-      cellVolt[27] = float(((msg.buf[4] << 8)  + msg.buf[5]) * 0.00125);
-      cellVolt[28] = float(((msg.buf[6] << 8)  + msg.buf[7]) * 0.00125);
-      break;
-
-    case 8:
-      cellVolt[29] = float(((msg.buf[0] << 8) + msg.buf[1]) * 0.00125);
-      cellVolt[30] = float(((msg.buf[2] << 8)   + msg.buf[3]) * 0.00125);
-      cellVolt[31] = float(((msg.buf[4] << 8)  + msg.buf[5]) * 0.00125);
-      cellVolt[32] = float(((msg.buf[6]  << 8)  + msg.buf[7]) * 0.00125);
-      break;
-
-    case 11:
-      temperatures[0] = float((((msg.buf[0] & 0x03) << 8 + msg.buf[1]) * 0.0556) - 27.778);
-      break;
-    case 12:
-      temperatures[1] = float((((msg.buf[0] & 0x03) << 8 + msg.buf[1]) * 0.0556) - 27.778);
-      temperatures[2] = float((((msg.buf[0] & 0x03) << 8 + msg.buf[1]) * 0.0556) - 27.778);
-      break;
-    case 13:
-      temperatures[3] = float((((msg.buf[0] & 0x03) << 8 + msg.buf[1]) * 0.0556) - 27.778);
-      break;
-
-    case 14:
-      temperatures[5] = float((((msg.buf[0] & 0x03) << 8 + msg.buf[1]) * 0.0556) - 27.778);
-      break;
-
-    default:
-      break;
+      default:
+        break;
+    }
   }
   /*
     if (getLowTemp() < lowestTemperature) lowestTemperature = getLowTemp();
@@ -140,6 +156,10 @@ void BMSModule::decodecan(int Id, CAN_message_t &msg)
   */
 }
 
+int BMSModule::getCellsUsed()
+{
+  return cellsused;
+}
 
 uint8_t BMSModule::getFaults()
 {
@@ -189,6 +209,7 @@ float BMSModule::getHighCellV()
 float BMSModule::getAverageV()
 {
   int x = 0;
+  cellsused = 0;
   float avgVal = 0.0f;
   for (int i = 0; i < 32; i++)
   {
@@ -196,6 +217,7 @@ float BMSModule::getAverageV()
     {
       x++;
       avgVal += cellVolt[i];
+      cellsused = i;
     }
   }
 
